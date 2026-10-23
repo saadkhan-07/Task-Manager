@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}My Tasks{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1 id="page-title">My Tasks</h1>
+  <a class="btn" href="{{ url_for('task_new') }}">+ New Task</a>
+</div>
+
+<form method="get" action="{{ url_for('tasks') }}" class="filters">
+  <input type="text" id="search-q" name="q" value="{{ q }}" placeholder="Search tasks...">
+  <select id="filter-status" name="status">
+    <option value="">All statuses</option>
+    {% for s in statuses %}
+      <option value="{{ s }}" {{ 'selected' if s == status }}>{{ labels[s] }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" id="filter-btn" class="btn">Filter</button>
+  <a href="{{ url_for('tasks') }}" class="btn btn-outline">Reset</a>
+</form>
+
+<div class="card">
+  {% if tasks %}
+  <table class="table" id="task-table">
+    <thead><tr><th>Task</th><th>Priority</th><th>Due</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for t in tasks %}
+      <tr class="task-row {{ 'row-done' if t.status == 'done' }}">
+        <td>
+          <strong class="task-title">{{ t.title }}</strong>
+          {% if t.description %}<div class="muted small">{{ t.description }}</div>{% endif %}
+        </td>
+        <td><span class="badge prio-{{ t.priority }}">{{ t.priority|capitalize }}</span></td>
+        <td class="{{ 'overdue' if t.overdue }}">{{ t.due_date.strftime('%d %b %Y') if t.due_date else '-' }}{% if t.overdue %} (overdue){% endif %}</td>
+        <td><span class="badge st-{{ t.status }} task-status">{{ t.status_label }}</span></td>
+        <td class="actions">
+          <form method="post" action="{{ url_for('task_toggle', task_id=t.id) }}" class="inline">
+            <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+            <button class="btn btn-small toggle-btn" type="submit">{{ 'Reopen' if t.status == 'done' else 'Done' }}</button>
+          </form>
+          <a class="btn btn-small btn-outline edit-btn" href="{{ url_for('task_edit', task_id=t.id) }}">Edit</a>
+          <form method="post" action="{{ url_for('task_delete', task_id=t.id) }}" class="inline" data-confirm="Delete this task?">
+            <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+            <button class="btn btn-small btn-danger delete-btn" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="muted" id="no-tasks">No tasks found.</p>
+  {% endif %}
+</div>
+{% endblock %}

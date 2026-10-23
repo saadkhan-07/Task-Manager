@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1 id="hero-title">Organise your work. Get things done.</h1>
+  <p>Task Manager is a simple web app to plan tasks, set priorities and track progress.</p>
+  <div class="hero-actions">
+    <a id="hero-register" class="btn" href="{{ url_for('register') }}">Create free account</a>
+    <a id="hero-login" class="btn btn-outline" href="{{ url_for('login') }}">Login</a>
+  </div>
+  <p class="muted">Try the demo account: <code>demo</code> / <code>demo123</code></p>
+</section>
+
+<section class="features">
+  <div class="card"><h3>&#128221; Manage tasks</h3><p>Create, edit, search and delete tasks with due dates.</p></div>
+  <div class="card"><h3>&#127919; Set priorities</h3><p>Mark tasks low, medium or high priority and never miss the important ones.</p></div>
+  <div class="card"><h3>&#128202; Track progress</h3><p>The dashboard shows pending, in-progress and completed work at a glance.</p></div>
+</section>
+{% endblock %}

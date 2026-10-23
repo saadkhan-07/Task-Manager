@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: taskmanager_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: tasksdb
+      MYSQL_USER: taskuser
+      MYSQL_PASSWORD: taskpass
+    volumes:
+      - db_data:/var/lib/mysql        # named volume = data survives container recreation
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  web:
+    build: ./app
+    container_name: taskmanager_web
+    restart: unless-stopped
+    ports:
+      - "80:5000"                     # host port 80 -> container port 5000
+    environment:
+      DB_HOST: db                     # service name = hostname on the compose network
+      DB_USER: taskuser
+      DB_PASSWORD: taskpass
+      DB_NAME: tasksdb
+      SECRET_KEY: change-this-to-any-long-random-text   # same on all instances
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:

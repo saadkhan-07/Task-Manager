@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h1 id="page-title">Login</h1>
+  <form method="post" action="{{ url_for('login') }}">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+    <label for="login-username">Username</label>
+    <input type="text" id="login-username" name="username" required autofocus>
+
+    <label for="login-password">Password</label>
+    <input type="password" id="login-password" name="password" required>
+
+    <button type="submit" id="login-submit" class="btn btn-block">Login</button>
+  </form>
+  <p class="muted">No account? <a href="{{ url_for('register') }}">Register</a></p>
+  <p class="muted">Demo: <code>demo</code> / <code>demo123</code></p>
+</div>
+{% endblock %}

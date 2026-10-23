@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{{ 'New Task' if mode == 'new' else 'Edit Task' }}{% endblock %}
+{% block content %}
+<div class="form-card wide">
+  <h1 id="page-title">{{ 'New Task' if mode == 'new' else 'Edit Task' }}</h1>
+  <form method="post">
+    <input type="hidden" name="_csrf" value="{{ csrf_token }}">
+
+    <label for="task-title">Title</label>
+    <input type="text" id="task-title" name="title" value="{{ task.title }}" required maxlength="150">
+
+    <label for="task-description">Description</label>
+    <textarea id="task-description" name="description" rows="4">{{ task.description or '' }}</textarea>
+
+    <div class="grid-3">
+      <div>
+        <label for="task-priority">Priority</label>
+        <select id="task-priority" name="priority">
+          {% for p in priorities %}
+            <option value="{{ p }}" {{ 'selected' if p == task.priority }}>{{ p|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="task-status">Status</label>
+        <select id="task-status" name="status">
+          {% for s in statuses %}
+            <option value="{{ s }}" {{ 'selected' if s == task.status }}>{{ labels[s] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="task-due">Due date</label>
+        <input type="date" id="task-due" name="due_date" value="{{ task.due_date.isoformat() if task.due_date else '' }}">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" id="task-submit" class="btn">{{ 'Create task' if mode == 'new' else 'Save changes' }}</button>
+      <a href="{{ url_for('tasks') }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

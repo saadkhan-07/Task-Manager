@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<h1 id="page-title">About this project</h1>
+<div class="card">
+  <p>This application was built for the <strong>DevOps for Cloud Computing (CSC418)</strong> lab mid exam.</p>
+  <h3>Technology stack</h3>
+  <table class="table">
+    <tr><th>Layer</th><th>Technology</th></tr>
+    <tr><td>Frontend</td><td>HTML, CSS, JavaScript (Jinja2 templates)</td></tr>
+    <tr><td>Backend</td><td>Python Flask + Gunicorn</td></tr>
+    <tr><td>Database</td><td>MySQL 8 (data stored in a Docker named volume)</td></tr>
+    <tr><td>Containers</td><td>Docker and Docker Compose (web + db)</td></tr>
+    <tr><td>Cloud</td><td>AWS EC2, Application Load Balancer, Auto Scaling Group</td></tr>
+    <tr><td>Testing</td><td>Selenium WebDriver</td></tr>
+  </table>
+  <p class="muted">This page was served by container <code>{{ host }}</code>.</p>
+</div>
+{% endblock %}
